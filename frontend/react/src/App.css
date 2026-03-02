@@ -1,0 +1,18 @@
+.dragging {
+  @apply opacity-50 rotate-3 scale-105 transition-transform;
+}
+
+.drop-placeholder {
+  @apply bg-gray-300 border-2 border-dashed border-gray-400 rounded-md mb-2;
+  height: 80px;
+}
+
+/* Animation for the Activity Panel slide-in */
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out forwards;
+}
