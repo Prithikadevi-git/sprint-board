@@ -12,7 +12,26 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.use(cors());
+
+// ✅ CORS Configuration
+const allowedOrigins = [
+  'http://localhost:3000', // local frontend
+  "https://sprint-board-three.vercel.app" // 🔥 replace with your deployed frontend URL
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true); // allow Postman / mobile apps
+      if (allowedOrigins.indexOf(origin) === -1) {
+        return callback(new Error('Not allowed by CORS'));
+      }
+      return callback(null, true);
+    },
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
 // Routes
@@ -20,8 +39,6 @@ app.use('/api/users', userRoutes);
 app.use('/api/boards', boardRoutes);
 app.use('/api/lists', listRoutes);
 app.use('/api/cards', cardRoutes);
-// Ensure this line exists
-// app.use('/api/boards', require('./routes/boardRoutes'));
 
 // Error Handler
 app.use((err, req, res, next) => {
@@ -30,4 +47,9 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`));
+
+app.listen(PORT, () =>
+  console.log(
+    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`
+  )
+);
